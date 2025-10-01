@@ -22,17 +22,58 @@ def install(version=None):
             
             # Verify installation and provide guidance
             print('\n🔍 Verifying Terraform installation...')
-            result = os.system('terraform --version > /dev/null 2>&1')
-            if result == 0:
-                print('✅ Terraform installed successfully!')
-                os.system('terraform --version')
-            else:
-                print('⚠️  Terraform installed but not found in PATH.')
-                print('📋 Next steps:')
-                print('   1. Restart your terminal or run: source ~/.bashrc')
-                print('   2. Or run: export PATH="/usr/bin:$PATH"')
-                print('   3. Verify with: terraform --version')
-                print('   4. If still not found, run: which terraform')
+            
+            # Check if terraform is in common locations
+            terraform_paths = ['/usr/bin/terraform', '/usr/local/bin/terraform', '/snap/bin/terraform']
+            terraform_found = False
+            
+            for path in terraform_paths:
+                if os.path.exists(path):
+                    print(f'✅ Terraform found at: {path}')
+                    os.system(f'{path} --version')
+                    terraform_found = True
+                    break
+            
+            if not terraform_found:
+                # Try running terraform command
+                result = os.system('terraform --version > /dev/null 2>&1')
+                if result == 0:
+                    print('✅ Terraform installed successfully!')
+                    os.system('terraform --version')
+                    terraform_found = True
+            
+            if not terraform_found:
+                print('⚠️  Terraform installation may have failed.')
+                print('🔄 Trying alternative installation method...')
+                
+                # Try direct download installation
+                try:
+                    if version and version != "latest":
+                        terraform_version = version
+                    else:
+                        terraform_version = "1.13.3"  # Latest stable
+                    
+                    print(f'📥 Downloading Terraform {terraform_version} directly...')
+                    os.system(f'wget https://releases.hashicorp.com/terraform/{terraform_version}/terraform_{terraform_version}_linux_amd64.zip')
+                    os.system(f'unzip terraform_{terraform_version}_linux_amd64.zip')
+                    os.system('sudo mv terraform /usr/local/bin/')
+                    os.system('sudo chmod +x /usr/local/bin/terraform')
+                    
+                    # Verify the direct installation
+                    result = os.system('terraform --version > /dev/null 2>&1')
+                    if result == 0:
+                        print('✅ Terraform installed successfully via direct download!')
+                        os.system('terraform --version')
+                    else:
+                        print('❌ Direct installation also failed.')
+                        print('📋 Manual steps:')
+                        print('   1. Check if terraform was installed: dpkg -l | grep terraform')
+                        print('   2. Add to PATH: export PATH="/usr/local/bin:$PATH"')
+                        print('   3. Restart terminal or run: source ~/.bashrc')
+                        
+                except Exception as e:
+                    print(f'❌ Alternative installation failed: {e}')
+                    print('📋 Please install manually or check system requirements.')
         elif 'centos' in distro.lower():
             print(f'Installing Terraform on {distro}...')
             if version and version != "latest":
