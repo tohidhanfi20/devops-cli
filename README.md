@@ -65,6 +65,38 @@ devops-cli --help
 
 ## 🚀 Server Installation (Ubuntu/CentOS)
 
+### Method 1: Direct Download (Recommended for servers)
+
+```bash
+# Download and extract
+wget https://github.com/tohidhanfi20/devops-cli/archive/refs/heads/main.zip
+unzip main.zip
+cd devops-cli-main
+
+# Install globally
+pip3 install -e .
+
+# Start interactive setup
+devops-cli init
+```
+
+### Method 1b: Using tar.gz (Alternative)
+
+```bash
+# Download and extract
+wget https://github.com/tohidhanfi20/devops-cli/archive/refs/heads/main.tar.gz
+tar -xzf main.tar.gz
+cd devops-cli-main
+
+# Install globally
+pip3 install -e .
+
+# Start interactive setup
+devops-cli init
+```
+
+### Method 2: One-liner (Alternative)
+
 ```bash
 # 1. Install DevOps CLI
 curl -sSL https://raw.githubusercontent.com/tohidhanfi20/devops-cli/main/install | python3
