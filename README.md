@@ -64,6 +64,62 @@ pip install devops-cli-tools
 devops-cli --help
 ```
 
+## 📦 Installation Options
+
+### PyPI Installation (Recommended)
+```bash
+# Install from PyPI (works on all platforms)
+pip install devops-cli-tools
+
+# Verify installation
+devops-cli --version
+```
+
+### Package Manager Installations
+
+#### macOS & Linux
+```bash
+# Homebrew (macOS & Linux)
+brew install tohidhanfi20/devops-cli/devops-cli-tools
+
+# MacPorts (macOS)
+sudo port install devops-cli-tools
+
+# APT (Debian/Ubuntu)
+sudo apt update
+sudo apt install devops-cli-tools
+
+# Pacman (Arch Linux)
+sudo pacman -S devops-cli-tools
+
+# Manual installation (macOS & Linux)
+curl -L https://github.com/tohidhanfi20/devops-cli/releases/latest/download/install.sh | bash
+```
+
+#### Windows
+```powershell
+# Chocolatey
+choco install devops-cli-tools
+
+# Scoop
+scoop install devops-cli-tools
+
+# Winget
+winget install tohidhanfi20.devops-cli-tools
+```
+
+### kubectl Plugin Installation
+```bash
+# Install as kubectl plugin (macOS & Linux)
+kubectl krew install devops-cli
+
+# Use as kubectl plugin
+kubectl devops-cli init
+kubectl devops-cli install docker
+```
+
+> **Note:** Package manager installations (Homebrew, APT, etc.) are planned for future releases. Currently, the recommended installation method is via PyPI (`pip install devops-cli-tools`) or direct download from GitHub releases.
+
 ## 🚀 Server Installation (Ubuntu/CentOS)
 
 ### Method 1: Direct Download (Recommended for servers)
