@@ -82,18 +82,17 @@ wget https://github.com/tohidhanfi20/devops-cli/archive/refs/heads/main.zip
 unzip main.zip
 cd devops-cli-main
 
-# Install dependencies and run
-python3 -m pip install requests beautifulsoup4 packaging distro
+# Run directly (no pip needed)
 python3 main.py init
 ```
 
 ### Method 3: One-liner Installation (Linux/macOS)
 ```bash
-# Download and run directly
-curl -L https://github.com/tohidhanfi20/devops-cli/archive/refs/heads/main.zip -o devops-cli.zip
-unzip devops-cli.zip
-cd devops-cli-main
-python3 main.py init
+# Download and run directly (handles pip issues automatically)
+curl -sSL https://raw.githubusercontent.com/tohidhanfi20/devops-cli/main/install | python3
+
+# If pip is not available, it will show you where to run the CLI
+# Example output: cd /tmp/devops-cli-xyz && python3 main.py init
 ```
 
 > **Note:** For servers without pip, use the direct download method. The PyPI method requires pip to be installed first.

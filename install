@@ -60,36 +60,47 @@ def download_and_install():
             print("🔧 Installing DevOps CLI globally...")
             
             # Check if pip is available first
+            pip_available = False
             try:
                 subprocess.run([sys.executable, "-m", "pip", "--version"], 
                               check=True, capture_output=True, text=True)
                 print("✅ pip is available")
+                pip_available = True
             except (subprocess.CalledProcessError, FileNotFoundError):
                 print("⚠️  pip not found, trying to install it...")
                 try:
                     subprocess.run([sys.executable, "-m", "ensurepip", "--upgrade"], check=True)
                     print("✅ pip installed successfully")
+                    pip_available = True
                 except subprocess.CalledProcessError:
-                    print("❌ Could not install pip. Please install pip manually or use direct download method.")
-                    print(f"\n🔧 Alternative: Run directly from {devops_dir}")
-                    print("   python3 main.py init")
-                    return False
+                    print("⚠️  pip not available, will run directly without installation")
+                    pip_available = False
             
-            # Install using pip in development mode for global access
-            result = subprocess.run([
-                sys.executable, "-m", "pip", "install", "-e", "."
-            ], cwd=str(devops_dir), capture_output=True, text=True)
+            if pip_available:
+                # Install using pip in development mode for global access
+                result = subprocess.run([
+                    sys.executable, "-m", "pip", "install", "-e", "."
+                ], cwd=str(devops_dir), capture_output=True, text=True)
+                
+                if result.returncode == 0:
+                    print("✅ DevOps CLI installed successfully!")
+                    print("\n🎉 You can now use 'devops-cli' from anywhere!")
+                    print("💡 Try: devops-cli --help")
+                    return True
+                else:
+                    print(f"❌ pip installation failed: {result.stderr}")
+                    print("🔄 Falling back to direct execution...")
+                    pip_available = False
             
-            if result.returncode == 0:
-                print("✅ DevOps CLI installed successfully!")
-                print("\n🎉 You can now use 'devops-cli' from anywhere!")
-                print("💡 Try: devops-cli --help")
-                return True
-            else:
-                print(f"❌ Installation failed: {result.stderr}")
-                print(f"\n🔧 Alternative: Run directly from {devops_dir}")
+            if not pip_available:
+                # Run directly without installation
+                print("🚀 Running DevOps CLI directly...")
+                print(f"📁 CLI location: {devops_dir}")
+                print("\n💡 To use the CLI, run:")
+                print(f"   cd {devops_dir}")
                 print("   python3 main.py init")
-                return False
+                print("\n🎉 DevOps CLI is ready to use!")
+                return True
                 
     except Exception as e:
         print(f"❌ Installation failed: {e}")
