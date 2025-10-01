@@ -19,6 +19,20 @@ def install(version=None):
                 os.system('curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -')
                 os.system('sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"')
                 os.system('sudo apt-get update && sudo apt-get install terraform')
+            
+            # Verify installation and provide guidance
+            print('\n🔍 Verifying Terraform installation...')
+            result = os.system('terraform --version > /dev/null 2>&1')
+            if result == 0:
+                print('✅ Terraform installed successfully!')
+                os.system('terraform --version')
+            else:
+                print('⚠️  Terraform installed but not found in PATH.')
+                print('📋 Next steps:')
+                print('   1. Restart your terminal or run: source ~/.bashrc')
+                print('   2. Or run: export PATH="/usr/bin:$PATH"')
+                print('   3. Verify with: terraform --version')
+                print('   4. If still not found, run: which terraform')
         elif 'centos' in distro.lower():
             print(f'Installing Terraform on {distro}...')
             if version and version != "latest":
@@ -30,6 +44,20 @@ def install(version=None):
                 os.system('sudo yum install -y yum-utils')
                 os.system('sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo')
                 os.system('sudo yum -y install terraform')
+            
+            # Verify installation and provide guidance
+            print('\n🔍 Verifying Terraform installation...')
+            result = os.system('terraform --version > /dev/null 2>&1')
+            if result == 0:
+                print('✅ Terraform installed successfully!')
+                os.system('terraform --version')
+            else:
+                print('⚠️  Terraform installed but not found in PATH.')
+                print('📋 Next steps:')
+                print('   1. Restart your terminal or run: source ~/.bashrc')
+                print('   2. Or run: export PATH="/usr/bin:$PATH"')
+                print('   3. Verify with: terraform --version')
+                print('   4. If still not found, run: which terraform')
         else:
             print(f'Unsupported Linux distribution: {distro}')
     elif os_type == 'Darwin':

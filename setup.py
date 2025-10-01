@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="devops-cli",
-    version="1.0.0",
+    name="devops-cli-tools",
+    version="1.0.1",
     description="Universal DevOps CLI Installer & Updater",
     author="Tohid Hanfi",
     author_email="tohidhanfi20@gmail.com",

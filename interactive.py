@@ -209,3 +209,8 @@ def start_interactive_session():
     print("  devops-cli list          # List all available tools")
     print("  devops-cli status        # Check installation status")
     print("  devops-cli versions <tool>  # Show available versions")
+    print("\n🔧 If a tool command is not found:")
+    print("  1. Restart your terminal or run: source ~/.bashrc")
+    print("  2. Check if the tool is in PATH: which <tool-name>")
+    print("  3. Try running the tool with full path: /usr/bin/<tool-name>")
+    print("  4. For package managers (apt/yum), restart terminal to refresh PATH")

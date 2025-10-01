@@ -41,6 +41,7 @@ COMMANDS:
     list                    List all available tools
     versions <tool>         Show available versions for a tool
     status                  Check installation status of all tools
+    verify                  Verify tool installations and provide troubleshooting steps
     --version, -v           Show application version
     --help, -h              Show this help message
 
@@ -170,6 +171,57 @@ def check_status():
     
     print("\nNote: Status checking will be implemented in future versions")
 
+def verify_installations():
+    """Verify tool installations and provide troubleshooting steps"""
+    import subprocess
+    
+    print("🔍 DevOps CLI Installation Verification")
+    print("=" * 50)
+    
+    tools = {
+        'docker': 'docker --version',
+        'kubectl': 'kubectl version --client',
+        'awscli': 'aws --version',
+        'gcloud': 'gcloud --version',
+        'az': 'az --version',
+        'jenkins': 'java -jar jenkins.war --version',
+        'helm': 'helm version',
+        'prometheus': 'prometheus --version',
+        'terraform': 'terraform --version'
+    }
+    
+    issues_found = []
+    
+    for tool, command in tools.items():
+        print(f"\n🔍 Checking {tool}...")
+        try:
+            result = subprocess.run(command.split(), capture_output=True, text=True, timeout=10)
+            if result.returncode == 0:
+                print(f"✅ {tool}: {result.stdout.strip().split(chr(10))[0]}")
+            else:
+                print(f"❌ {tool}: Command failed")
+                issues_found.append(tool)
+        except subprocess.TimeoutExpired:
+            print(f"⏰ {tool}: Command timed out")
+            issues_found.append(tool)
+        except FileNotFoundError:
+            print(f"❌ {tool}: Not found in PATH")
+            issues_found.append(tool)
+        except Exception as e:
+            print(f"❌ {tool}: Error - {e}")
+            issues_found.append(tool)
+    
+    if issues_found:
+        print(f"\n⚠️  Issues found with: {', '.join(issues_found)}")
+        print("\n🔧 Troubleshooting steps:")
+        print("1. Restart your terminal or run: source ~/.bashrc")
+        print("2. Check if tools are in PATH: which <tool-name>")
+        print("3. Try running with full path: /usr/bin/<tool-name>")
+        print("4. For package managers (apt/yum), restart terminal to refresh PATH")
+        print("5. Reinstall problematic tools: devops-cli install <tool>")
+    else:
+        print("\n🎉 All tools are working correctly!")
+
 def main():
     # Handle version and help flags first
     if len(sys.argv) == 1:
@@ -215,6 +267,9 @@ def main():
 
     # Status command
     status_parser = subparsers.add_parser('status', help='Check installation status of all tools')
+    
+    # Verify command
+    verify_parser = subparsers.add_parser('verify', help='Verify tool installations and provide troubleshooting steps')
 
     args = parser.parse_args()
 
@@ -226,6 +281,8 @@ def main():
         show_tool_versions(args.tool)
     elif args.command == 'status':
         check_status()
+    elif args.command == 'verify':
+        verify_installations()
     elif args.command == 'install':
         if args.tool == 'docker':
             docker.install(version=args.version)

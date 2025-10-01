@@ -1,12 +1,13 @@
-# DevOps CLI
+# DevOps CLI Tools
 
-![Latest GitHub release](https://img.shields.io/github/release/tohidhanfi20/devops-cli.svg)
+![PyPI version](https://img.shields.io/pypi/v/devops-cli-tools.svg)
+![PyPI downloads](https://img.shields.io/pypi/dm/devops-cli-tools.svg)
 ![GitHub stars](https://img.shields.io/github/stars/tohidhanfi20/devops-cli.svg?label=github%20stars)
 ![Python version](https://img.shields.io/badge/python-3.7%2B-blue.svg)
 ![Platform support](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-A universal installer for DevOps tools across Windows, macOS, and Linux with dynamic version fetching from official sources.
+A universal installer for DevOps tools across Windows, macOS, and Linux with dynamic version fetching from official sources. Available on PyPI as `devops-cli-tools`.
 
 [Install &rarr;](#installation)
 
@@ -57,7 +58,7 @@ git clone https://github.com/tohidhanfi20/devops-cli.git
 cd devops-cli
 
 # Install globally (like npm install -g)
-pip install -e .
+pip install devops-cli-tools
 
 # Now you can use 'devops-cli' from anywhere!
 devops-cli --help
@@ -270,6 +271,9 @@ devops-cli install terraform
 
 # Check what's installed
 devops-cli status
+
+# Verify tool installations and get troubleshooting help
+devops-cli verify
 
 # Update all tools to latest versions
 devops-cli update all
