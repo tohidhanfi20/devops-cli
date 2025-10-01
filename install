@@ -54,11 +54,8 @@ def download_and_install():
                 print("❌ Failed to extract repository")
                 return False
             
-            # Navigate to devops-cli directory
-            devops_dir = extracted_dir / "devops-cli"
-            if not devops_dir.exists():
-                print("❌ devops-cli directory not found")
-                return False
+            # The extracted directory IS the devops-cli directory
+            devops_dir = extracted_dir
             
             print("🔧 Installing DevOps CLI globally...")
             
