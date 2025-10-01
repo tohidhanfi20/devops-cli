@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+"""
+One-liner installer for DevOps CLI
+Usage: curl -sSL https://raw.githubusercontent.com/yourusername/devops-cli/main/install | python3
+"""
+
+import urllib.request
+import tempfile
+import os
+import sys
+import subprocess
+import zipfile
+from pathlib import Path
+
+def download_and_install():
+    """Download and install the devops-cli CLI globally"""
+    
+    print("🚀 DevOps CLI - Quick Install")
+    print("=" * 50)
+    
+    # GitHub repository details
+    repo = "tohidhanfi20/devops-cli"
+    branch = "main"
+    
+    # Download URL
+    download_url = f"https://github.com/{repo}/archive/refs/heads/{branch}.zip"
+    
+    print("📥 Downloading DevOps CLI...")
+    
+    try:
+        # Download the repository
+        with urllib.request.urlopen(download_url) as response:
+            zip_data = response.read()
+        
+        # Extract to temporary directory
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            zip_file = temp_path / "repo.zip"
+            
+            with open(zip_file, 'wb') as f:
+                f.write(zip_data)
+            
+            with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+                zip_ref.extractall(temp_path)
+            
+            # Find the extracted directory
+            extracted_dir = None
+            for item in temp_path.iterdir():
+                if item.is_dir() and item.name.startswith("devops-cli"):
+                    extracted_dir = item
+                    break
+            
+            if not extracted_dir:
+                print("❌ Failed to extract repository")
+                return False
+            
+            # Navigate to devops-cli directory
+            devops_dir = extracted_dir / "devops-cli"
+            if not devops_dir.exists():
+                print("❌ devops-cli directory not found")
+                return False
+            
+            print("🔧 Installing DevOps CLI globally...")
+            
+            # Install using pip in development mode for global access
+            result = subprocess.run([
+                sys.executable, "-m", "pip", "install", "-e", "."
+            ], cwd=str(devops_dir), capture_output=True, text=True)
+            
+            if result.returncode == 0:
+                print("✅ DevOps CLI installed successfully!")
+                print("\n🎉 You can now use 'devops-cli' from anywhere!")
+                print("Try: devops-cli --help")
+                return True
+            else:
+                print(f"❌ Installation failed: {result.stderr}")
+                return False
+                
+    except Exception as e:
+        print(f"❌ Installation failed: {e}")
+        return False
+
+if __name__ == "__main__":
+    success = download_and_install()
+    if success:
+        print("\n✅ Installation completed successfully!")
+        print("You can now use: devops-cli --help")
+    else:
+        print("\n❌ Installation failed!")
+        sys.exit(1)
