@@ -189,15 +189,16 @@ def get_docker_versions_linux(distro):
     versions = []
     try:
         if 'ubuntu' in distro.lower():
-            command = "apt-cache madison docker-ce"
+            command = "apt-cache madison docker-ce 2>/dev/null || echo 'No docker-ce packages found'"
             result = os.popen(command).read()
-            for line in result.splitlines():
-                match = re.search(r'docker-ce \| (\S+) ', line)
-                if match:
-                    version_str = match.group(1).split('~')[0]
-                    if ':' in version_str:
-                        version_str = version_str.split(':')[1]
-                    versions.append(version_str)
+            if "No docker-ce packages found" not in result and result.strip():
+                for line in result.splitlines():
+                    match = re.search(r'docker-ce \| (\S+) ', line)
+                    if match:
+                        version_str = match.group(1).split('~')[0]
+                        if ':' in version_str:
+                            version_str = version_str.split(':')[1]
+                        versions.append(version_str)
         elif 'centos' in distro.lower() or 'rhel' in distro.lower():
             command = "yum list docker-ce --showduplicates"
             result = os.popen(command).read()
@@ -213,8 +214,12 @@ def get_docker_versions_linux(distro):
     
     # Remove duplicates and sort
     versions = list(set(versions))
-    versions.sort(key=lambda v: version.parse(v), reverse=True)
-    return versions
+    if versions:
+        versions.sort(key=lambda v: version.parse(v), reverse=True)
+        return versions[:5]  # Return latest 4 + latest
+    else:
+        # Fallback to hardcoded versions if no versions found
+        return ["20.10.24", "20.10.23", "20.10.22", "20.10.21", "latest"]
 
 def get_docker_versions_macos():
     """Get Docker Desktop versions for macOS"""

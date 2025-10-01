@@ -13,7 +13,7 @@ def install(version=None):
                 os.system('sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl')
                 os.system('curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -')
                 os.system('sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"')
-                os.system('sudo apt-get update && sudo apt-get install terraform={version}')
+                os.system(f'sudo apt-get update && sudo apt-get install terraform={version}')
             else:
                 os.system('sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl')
                 os.system('curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -')
@@ -112,7 +112,7 @@ def update(version=None):
         if 'ubuntu' in distro.lower():
             print(f'Updating Terraform on {distro}...')
             if version and version != "latest":
-                os.system('sudo apt-get update && sudo apt-get install terraform={version}')
+                os.system(f'sudo apt-get update && sudo apt-get install terraform={version}')
             else:
                 os.system('sudo apt-get update && sudo apt-get install terraform')
         elif 'centos' in distro.lower():
