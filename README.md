@@ -66,7 +66,7 @@ devops-cli --help
 
 ## 📦 Installation Options
 
-### PyPI Installation (Recommended)
+### Method 1: PyPI Installation (Recommended)
 ```bash
 # Install from PyPI (works on all platforms)
 pip install devops-cli-tools
@@ -75,50 +75,28 @@ pip install devops-cli-tools
 devops-cli --version
 ```
 
-### Package Manager Installations
-
-#### macOS & Linux
+### Method 2: Direct Download (For servers without pip)
 ```bash
-# Homebrew (macOS & Linux)
-brew install tohidhanfi20/devops-cli/devops-cli-tools
+# Download and extract
+wget https://github.com/tohidhanfi20/devops-cli/archive/refs/heads/main.zip
+unzip main.zip
+cd devops-cli-main
 
-# MacPorts (macOS)
-sudo port install devops-cli-tools
-
-# APT (Debian/Ubuntu)
-sudo apt update
-sudo apt install devops-cli-tools
-
-# Pacman (Arch Linux)
-sudo pacman -S devops-cli-tools
-
-# Manual installation (macOS & Linux)
-curl -L https://github.com/tohidhanfi20/devops-cli/releases/latest/download/install.sh | bash
+# Install dependencies and run
+python3 -m pip install requests beautifulsoup4 packaging distro
+python3 main.py init
 ```
 
-#### Windows
-```powershell
-# Chocolatey
-choco install devops-cli-tools
-
-# Scoop
-scoop install devops-cli-tools
-
-# Winget
-winget install tohidhanfi20.devops-cli-tools
-```
-
-### kubectl Plugin Installation
+### Method 3: One-liner Installation (Linux/macOS)
 ```bash
-# Install as kubectl plugin (macOS & Linux)
-kubectl krew install devops-cli
-
-# Use as kubectl plugin
-kubectl devops-cli init
-kubectl devops-cli install docker
+# Download and run directly
+curl -L https://github.com/tohidhanfi20/devops-cli/archive/refs/heads/main.zip -o devops-cli.zip
+unzip devops-cli.zip
+cd devops-cli-main
+python3 main.py init
 ```
 
-> **Note:** Package manager installations (Homebrew, APT, etc.) are planned for future releases. Currently, the recommended installation method is via PyPI (`pip install devops-cli-tools`) or direct download from GitHub releases.
+> **Note:** For servers without pip, use the direct download method. The PyPI method requires pip to be installed first.
 
 ## 🚀 Server Installation (Ubuntu/CentOS)
 
