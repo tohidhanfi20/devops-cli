@@ -155,7 +155,7 @@ function New-StandaloneScript {
         $scriptContent = @"
 import sys
 import os
-sys.path.insert(0, r'$CLIDir')
+sys.path.insert(0, r'$($CLIDir)')
 from main import main
 if __name__ == '__main__':
     main()
