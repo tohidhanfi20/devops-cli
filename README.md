@@ -31,16 +31,16 @@ A universal installer for DevOps tools across Windows, macOS, and Linux. Automat
 ### **Windows Users**
 ```powershell
 # PowerShell (Recommended)
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/tohidhanfi20/devops-cli/main/install-devops-cli.ps1" -OutFile "install-devops-cli.ps1"
-.\install-devops-cli.ps1
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/tohidhanfi20/devops-cli/main/install-devops-cli.bat" -OutFile "install-devops-cli.bat"
+.\install-devops-cli.bat
 ```
 
 ```cmd
 # Command Prompt (Alternative)
-# If curl is not available, download manually:
+# Download manually:
 # 1. Go to: https://raw.githubusercontent.com/tohidhanfi20/devops-cli/main/install-devops-cli.bat
 # 2. Save as: install-devops-cli.bat
-# 3. Run: install-devops-cli.bat
+# 3. Run: .\install-devops-cli.bat
 ```
 
 ### **Linux/macOS Users**
