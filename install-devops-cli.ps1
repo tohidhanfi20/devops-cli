@@ -152,14 +152,15 @@ function New-StandaloneScript {
     Write-Host "📝 Creating standalone script..." -ForegroundColor Blue
     
     try {
-        $scriptContent = @"
-import sys
-import os
-sys.path.insert(0, r'$($CLIDir)')
-from main import main
-if __name__ == '__main__':
-    main()
-"@
+        $scriptLines = @(
+            "import sys"
+            "import os"
+            "sys.path.insert(0, '$($CLIDir)')"
+            "from main import main"
+            "if __name__ == '__main__':"
+            '    main()'
+        )
+        $scriptContent = $scriptLines -join "`n"
         
         $scriptPath = Join-Path $CLIDir "devops-cli-standalone.py"
         $scriptContent | Out-File -FilePath $scriptPath -Encoding UTF8
