@@ -152,18 +152,18 @@ function New-StandaloneScript {
     Write-Host "📝 Creating standalone script..." -ForegroundColor Blue
     
     try {
-        $scriptLines = @(
-            "import sys"
-            "import os"
-            "sys.path.insert(0, '$($CLIDir)')"
-            "from main import main"
-            "if __name__ == '__main__':"
-            '    main()'
-        )
-        $scriptContent = $scriptLines -join "`n"
-        
         $scriptPath = Join-Path $CLIDir "devops-cli-standalone.py"
-        $scriptContent | Out-File -FilePath $scriptPath -Encoding UTF8
+        
+        # Create Python script using simple string concatenation
+        $lines = @()
+        $lines += "import sys"
+        $lines += "import os"
+        $lines += "sys.path.insert(0, '$($CLIDir)')"
+        $lines += "from main import main"
+        $lines += "if __name__ == '__main__':"
+        $lines += "    main()"
+        $pythonScript = $lines -join "`n"
+        $pythonScript | Out-File -FilePath $scriptPath -Encoding UTF8
         
         Write-Host "✅ Standalone script created: $scriptPath" -ForegroundColor Green
         return $scriptPath
