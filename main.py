@@ -9,6 +9,7 @@ from versioning import (
 )
 
 from tools import docker, kubectl, awscli, gcloud, az, jenkins, helm, prometheus, terraform
+from dependencies import dependency_manager
 import interactive
 
 # Application version
@@ -35,13 +36,14 @@ USAGE:
 
 COMMANDS:
     init                    Start interactive installation session (recommended for servers)
-    install <tool>          Install a specific tool
+    install <tool>          Install a specific tool with automatic dependency management
     uninstall <tool>        Uninstall a tool
     update <tool>           Update a tool to latest version
     list                    List all available tools
     versions <tool>         Show available versions for a tool
     status                  Check installation status of all tools
     verify                  Verify tool installations and provide troubleshooting steps
+    deps <tool>             Check and install dependencies for a tool
     --version, -v           Show application version
     --help, -h              Show this help message
 
@@ -60,10 +62,15 @@ EXAMPLES:
     # Interactive installation
     devops-cli init
 
-    # Install specific tools
+    # Install specific tools (with automatic dependency management)
+    devops-cli install jenkins --version 2.401.3
     devops-cli install docker --version 4.47.0
     devops-cli install kubectl
     devops-cli install awscli --version 2.13.0
+
+    # Check and install dependencies
+    devops-cli deps jenkins
+    devops-cli deps docker
 
     # Update tools
     devops-cli update docker
@@ -79,10 +86,12 @@ EXAMPLES:
 FEATURES:
     ✅ Cross-platform support (Windows, macOS, Linux)
     ✅ Dynamic version fetching from official sources
-    ✅ Automatic dependency management
+    ✅ Automatic dependency management (Java for Jenkins, etc.)
+    ✅ Modern installation methods (no deprecated commands)
     ✅ Interactive and command-line modes
     ✅ Version management and updates
     ✅ Clean uninstallation
+    ✅ Dependency validation and installation
 
 SUPPORTED OPERATING SYSTEMS:
     • Windows 10/11
@@ -270,6 +279,10 @@ def main():
     
     # Verify command
     verify_parser = subparsers.add_parser('verify', help='Verify tool installations and provide troubleshooting steps')
+    
+    # Dependencies command
+    deps_parser = subparsers.add_parser('deps', help='Check and install dependencies for a tool')
+    deps_parser.add_argument('tool', choices=['docker', 'kubectl', 'awscli', 'gcloud', 'az', 'jenkins', 'helm', 'prometheus', 'terraform'], help='Tool to check dependencies for')
 
     args = parser.parse_args()
 
@@ -283,6 +296,16 @@ def main():
         check_status()
     elif args.command == 'verify':
         verify_installations()
+    elif args.command == 'deps':
+        print(f"🔍 Checking dependencies for {args.tool}...")
+        if dependency_manager.validate_dependencies(args.tool):
+            print(f"✅ All dependencies for {args.tool} are installed")
+        else:
+            print(f"📦 Installing missing dependencies for {args.tool}...")
+            if dependency_manager.install_dependencies(args.tool):
+                print(f"✅ Dependencies for {args.tool} installed successfully")
+            else:
+                print(f"❌ Failed to install dependencies for {args.tool}")
     elif args.command == 'install':
         if args.tool == 'docker':
             docker.install(version=args.version)

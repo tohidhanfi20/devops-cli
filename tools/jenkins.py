@@ -1,89 +1,200 @@
 
 import os
+import subprocess
 from utils import get_os, get_linux_distro
 from versioning import get_download_url
+from dependencies import dependency_manager
 
 def install(version=None):
     os_type = get_os()
+    
+    # Install dependencies first
+    print("🔧 Installing Jenkins dependencies...")
+    if not dependency_manager.install_dependencies('jenkins'):
+        print("❌ Failed to install Jenkins dependencies. Aborting installation.")
+        return False
+    
     if os_type == 'Linux':
         distro = get_linux_distro()
-        if 'ubuntu' in distro.lower():
+        if 'ubuntu' in distro.lower() or 'debian' in distro.lower():
             print(f'Installing Jenkins on {distro}...')
-            if version and version != "latest":
-                print(f'Installing Jenkins version {version} on Ubuntu...')
-                os.system('wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -')
-                os.system('sudo sh -c \'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list\'')
-                os.system('sudo apt-get update')
-                os.system(f'sudo apt-get install -y jenkins={version}')
-            else:
-                os.system('wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -')
-                os.system('sudo sh -c \'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list\'')
-                os.system('sudo apt-get update')
-                os.system('sudo apt-get install -y jenkins')
-        elif 'centos' in distro.lower():
+            
+            # Modern Jenkins installation method (2024+)
+            try:
+                # Download and add Jenkins key using modern method
+                print("📥 Adding Jenkins repository key...")
+                subprocess.run([
+                    'sudo', 'wget', '-O', '/etc/apt/keyrings/jenkins-keyring.asc',
+                    'https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key'
+                ], check=True, timeout=30)
+                
+                # Add Jenkins repository
+                print("📦 Adding Jenkins repository...")
+                jenkins_repo = 'deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/'
+                with open('/etc/apt/sources.list.d/jenkins.list', 'w') as f:
+                    f.write(jenkins_repo + '\n')
+                
+                # Update package list
+                print("🔄 Updating package list...")
+                subprocess.run(['sudo', 'apt', 'update'], check=True, timeout=60)
+                
+                # Install Jenkins
+                if version and version != "latest":
+                    print(f'Installing Jenkins version {version} on Ubuntu...')
+                    subprocess.run(['sudo', 'apt', 'install', '-y', f'jenkins={version}'], check=True, timeout=300)
+                else:
+                    print('Installing latest Jenkins on Ubuntu...')
+                    subprocess.run(['sudo', 'apt', 'install', '-y', 'jenkins'], check=True, timeout=300)
+                
+                print("✅ Jenkins installed successfully!")
+                print("🚀 To start Jenkins: sudo systemctl start jenkins")
+                print("🔧 To enable auto-start: sudo systemctl enable jenkins")
+                print("🌐 Access Jenkins at: http://localhost:8080")
+                print("🔑 Get initial admin password: sudo cat /var/lib/jenkins/secrets/initialAdminPassword")
+                
+            except subprocess.CalledProcessError as e:
+                print(f"❌ Failed to install Jenkins: {e}")
+                return False
+            except subprocess.TimeoutExpired:
+                print("⏰ Installation timed out")
+                return False
+        elif 'centos' in distro.lower() or 'rhel' in distro.lower() or 'fedora' in distro.lower():
             print(f'Installing Jenkins on {distro}...')
-            if version and version != "latest":
-                print(f'Installing Jenkins version {version} on CentOS...')
-                os.system('sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo')
-                os.system('sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key')
-                os.system(f'sudo yum install -y jenkins-{version}')
-            else:
-                os.system('sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo')
-                os.system('sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key')
-                os.system('sudo yum install -y jenkins')
+            
+            try:
+                # Add Jenkins repository for RHEL/CentOS/Fedora
+                print("📥 Adding Jenkins repository...")
+                subprocess.run([
+                    'sudo', 'wget', '-O', '/etc/yum.repos.d/jenkins.repo',
+                    'https://pkg.jenkins.io/redhat-stable/jenkins.repo'
+                ], check=True, timeout=30)
+                
+                # Import Jenkins key
+                print("🔑 Importing Jenkins key...")
+                subprocess.run([
+                    'sudo', 'rpm', '--import', 
+                    'https://pkg.jenkins.io/redhat-stable/jenkins.io.key'
+                ], check=True, timeout=30)
+                
+                # Install Jenkins
+                if version and version != "latest":
+                    print(f'Installing Jenkins version {version} on {distro}...')
+                    subprocess.run(['sudo', 'yum', 'install', '-y', f'jenkins-{version}'], check=True, timeout=300)
+                else:
+                    print(f'Installing latest Jenkins on {distro}...')
+                    subprocess.run(['sudo', 'yum', 'install', '-y', 'jenkins'], check=True, timeout=300)
+                
+                print("✅ Jenkins installed successfully!")
+                print("🚀 To start Jenkins: sudo systemctl start jenkins")
+                print("🔧 To enable auto-start: sudo systemctl enable jenkins")
+                print("🌐 Access Jenkins at: http://localhost:8080")
+                print("🔑 Get initial admin password: sudo cat /var/lib/jenkins/secrets/initialAdminPassword")
+                
+            except subprocess.CalledProcessError as e:
+                print(f"❌ Failed to install Jenkins: {e}")
+                return False
+            except subprocess.TimeoutExpired:
+                print("⏰ Installation timed out")
+                return False
         else:
             print(f'Unsupported Linux distribution: {distro}')
     elif os_type == 'Darwin':
         print('Installing Jenkins on macOS...')
-        if version and version != "latest":
-            print(f'Installing Jenkins version {version} on macOS...')
-            os.system(f'brew install jenkins-lts@{version}')
-        else:
-            os.system('brew install jenkins-lts')
+        try:
+            if version and version != "latest":
+                print(f'Installing Jenkins version {version} on macOS...')
+                subprocess.run(['brew', 'install', f'jenkins-lts@{version}'], check=True, timeout=300)
+            else:
+                print('Installing latest Jenkins on macOS...')
+                subprocess.run(['brew', 'install', 'jenkins-lts'], check=True, timeout=300)
+            
+            print("✅ Jenkins installed successfully!")
+            print("🚀 To start Jenkins: brew services start jenkins-lts")
+            print("🌐 Access Jenkins at: http://localhost:8080")
+            print("🔑 Get initial admin password: cat ~/.jenkins/secrets/initialAdminPassword")
+            
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Failed to install Jenkins: {e}")
+            return False
+        except subprocess.TimeoutExpired:
+            print("⏰ Installation timed out")
+            return False
+            
     elif os_type == 'Windows':
         print('Installing Jenkins on Windows...')
-        if version and version != "latest":
-            print(f'Installing Jenkins version {version} on Windows...')
-            download_url = get_download_url('jenkins', version, os_type)
-            if download_url:
-                os.system(f'powershell -Command "Invoke-WebRequest -Uri {download_url} -OutFile .\\jenkins.zip; Expand-Archive .\\jenkins.zip -DestinationPath .\\jenkins"')
-            else:
-                print(f'Could not generate download URL for version {version}')
-        else:
-            download_url = get_download_url('jenkins', 'latest', os_type)
-            if download_url:
-                os.system(f'powershell -Command "Invoke-WebRequest -Uri {download_url} -OutFile .\\jenkins.zip; Expand-Archive .\\jenkins.zip -DestinationPath .\\jenkins"')
-            else:
-                print('Could not generate download URL for latest version')
-        print('Jenkins downloaded and unzipped to .\\jenkins. To start Jenkins, run: java -jar .\\jenkins\\jenkins.war')
+        try:
+            # For Windows, we'll download the Jenkins WAR file
+            jenkins_version = version if version and version != "latest" else "2.401.3"
+            download_url = f"https://get.jenkins.io/war-stable/{jenkins_version}/jenkins.war"
+            
+            print(f"📥 Downloading Jenkins {jenkins_version}...")
+            subprocess.run([
+                'powershell', '-Command',
+                f'Invoke-WebRequest -Uri {download_url} -OutFile .\\jenkins.war'
+            ], check=True, timeout=300)
+            
+            print("✅ Jenkins downloaded successfully!")
+            print("🚀 To start Jenkins: java -jar jenkins.war")
+            print("🌐 Access Jenkins at: http://localhost:8080")
+            print("🔑 Get initial admin password from the console output when starting Jenkins")
+            
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Failed to download Jenkins: {e}")
+            return False
+        except subprocess.TimeoutExpired:
+            print("⏰ Download timed out")
+            return False
     else:
         print(f'Unsupported OS: {os_type}')
 
 def uninstall(version=None):
     os_type = get_os()
-    if os_type == 'Linux':
-        distro = get_linux_distro()
-        if 'ubuntu' in distro.lower():
-            print(f'Uninstalling Jenkins from {distro}...')
-            os.system('sudo apt-get remove -y jenkins')
-        elif 'centos' in distro.lower():
-            print(f'Uninstalling Jenkins from {distro}...')
-            os.system('sudo yum remove -y jenkins')
-        else:
-            print(f'Unsupported Linux distribution: {distro}')
-    elif os_type == 'Darwin':
-        print('Uninstalling Jenkins from macOS...')
-        if version and version != "latest":
-            os.system(f'brew uninstall jenkins-lts@{version}')
-        else:
-            os.system('brew uninstall jenkins-lts')
-    elif os_type == 'Windows':
-        print('Uninstalling Jenkins from Windows...')
-        print('Please delete the .\\jenkins directory manually.')
-        if version and version != "latest":
-            print(f'You may need to look for version {version} in the .\\jenkins directory.')
-    else:
-        print(f'Unsupported OS: {os_type}')
+    
+    try:
+        if os_type == 'Linux':
+            distro = get_linux_distro()
+            if 'ubuntu' in distro.lower() or 'debian' in distro.lower():
+                print(f'Uninstalling Jenkins from {distro}...')
+                subprocess.run(['sudo', 'apt', 'remove', '-y', 'jenkins'], check=True, timeout=60)
+                subprocess.run(['sudo', 'apt', 'autoremove', '-y'], check=True, timeout=60)
+            elif 'centos' in distro.lower() or 'rhel' in distro.lower() or 'fedora' in distro.lower():
+                print(f'Uninstalling Jenkins from {distro}...')
+                subprocess.run(['sudo', 'yum', 'remove', '-y', 'jenkins'], check=True, timeout=60)
+            else:
+                print(f'Unsupported Linux distribution: {distro}')
+                return False
+                
+        elif os_type == 'Darwin':
+            print('Uninstalling Jenkins from macOS...')
+            if version and version != "latest":
+                subprocess.run(['brew', 'uninstall', f'jenkins-lts@{version}'], check=True, timeout=60)
+            else:
+                subprocess.run(['brew', 'uninstall', 'jenkins-lts'], check=True, timeout=60)
+                
+        elif os_type == 'Windows':
+            print('Uninstalling Jenkins from Windows...')
+            print('Please delete the jenkins.war file manually.')
+            if version and version != "latest":
+                print(f'You may need to look for version {version} in the current directory.')
+                
+        print("✅ Jenkins uninstalled successfully!")
+        return True
+        
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Failed to uninstall Jenkins: {e}")
+        return False
+    except subprocess.TimeoutExpired:
+        print("⏰ Uninstall timed out")
+        return False
 
 def update(version=None):
-    install(version) # The installation process also handles updates
+    """Update Jenkins to the specified version or latest"""
+    print("🔄 Updating Jenkins...")
+    
+    # First uninstall the current version
+    if not uninstall():
+        print("❌ Failed to uninstall current Jenkins version")
+        return False
+    
+    # Then install the new version
+    return install(version)
