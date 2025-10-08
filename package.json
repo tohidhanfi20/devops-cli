@@ -1,0 +1,21 @@
+{
+  "name": "devops-cli",
+  "version": "1.0.0",
+  "description": "A universal installer for DevOps tools, wrapped for npm installation.",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "pip install -e ."
+  },
+  "bin": {
+    "devops-cli": "./devops-cli-wrapper.js"
+  },
+  "keywords": [
+    "devops",
+    "cli",
+    "tools",
+    "installer",
+    "npm"
+  ],
+  "author": "Your Name/Organization",
+  "license": "MIT"
+}

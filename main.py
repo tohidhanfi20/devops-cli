@@ -24,7 +24,7 @@ def show_version():
 def show_help():
     """Show comprehensive help for the application"""
     print("""
-🚀 DevOps CLI v1.0.0
+DevOps CLI v1.0.0
 ====================
 
 DESCRIPTION:
@@ -48,15 +48,15 @@ COMMANDS:
     --help, -h              Show this help message
 
 AVAILABLE TOOLS:
-    🐳  docker              Docker Desktop (Windows/macOS) or Docker CE (Linux)
-    ☸️   kubectl             Kubernetes command-line tool
-    ☁️   awscli              Amazon Web Services CLI
-    🌩️   gcloud              Google Cloud SDK
-    🔵   az                  Azure CLI
-    🔧   jenkins             Jenkins CI/CD server
-    ⛵   helm                Kubernetes package manager
-    📊   prometheus          Monitoring and alerting system
-    🏗️   terraform           Infrastructure as Code tool
+    docker              Docker Desktop (Windows/macOS) or Docker CE (Linux)
+    kubectl             Kubernetes command-line tool
+    awscli              Amazon Web Services CLI
+    gcloud              Google Cloud SDK
+    az                  Azure CLI
+    jenkins             CI/CD automation server
+    helm                Kubernetes package manager
+    prometheus          Monitoring and alerting system
+    terraform           Infrastructure as Code tool
 
 EXAMPLES:
     # Interactive installation
@@ -84,14 +84,14 @@ EXAMPLES:
     devops-cli uninstall docker
 
 FEATURES:
-    ✅ Cross-platform support (Windows, macOS, Linux)
-    ✅ Dynamic version fetching from official sources
-    ✅ Automatic dependency management (Java for Jenkins, etc.)
-    ✅ Modern installation methods (no deprecated commands)
-    ✅ Interactive and command-line modes
-    ✅ Version management and updates
-    ✅ Clean uninstallation
-    ✅ Dependency validation and installation
+    Cross-platform support (Windows, macOS, Linux)
+    Dynamic version fetching from official sources
+    Automatic dependency management (Java for Jenkins, etc.)
+    Modern installation methods (no deprecated commands)
+    Interactive and command-line modes
+    Version management and updates
+    Clean uninstallation
+    Dependency validation and installation
 
 SUPPORTED OPERATING SYSTEMS:
     • Windows 10/11
@@ -106,15 +106,15 @@ For more information, visit: https://github.com/yourusername/devops-cli
 def list_tools():
     """List all available tools with their status"""
     tools = {
-        'docker': '🐳 Docker - Container platform',
-        'kubectl': '☸️ kubectl - Kubernetes CLI',
-        'awscli': '☁️ AWS CLI - Amazon Web Services CLI',
-        'gcloud': '🌩️ Google Cloud SDK - Google Cloud Platform tools',
-        'az': '🔵 Azure CLI - Microsoft Azure CLI',
-        'jenkins': '🔧 Jenkins - CI/CD automation server',
-        'helm': '⛵ Helm - Kubernetes package manager',
-        'prometheus': '📊 Prometheus - Monitoring system',
-        'terraform': '🏗️ Terraform - Infrastructure as Code'
+        'docker': 'Docker - Container platform',
+        'kubectl': 'kubectl - Kubernetes CLI',
+        'awscli': 'AWS CLI - Amazon Web Services CLI',
+        'gcloud': 'Google Cloud SDK - Google Cloud Platform tools',
+        'az': 'Azure CLI - Microsoft Azure CLI',
+        'jenkins': 'Jenkins - CI/CD automation server',
+        'helm': 'Helm - Kubernetes package manager',
+        'prometheus': 'Prometheus - Monitoring system',
+        'terraform': 'Terraform - Infrastructure as Code'
     }
     
     print("Available DevOps CLI Tools:")
@@ -184,7 +184,7 @@ def verify_installations():
     """Verify tool installations and provide troubleshooting steps"""
     import subprocess
     
-    print("🔍 DevOps CLI Installation Verification")
+    print("DevOps CLI Installation Verification")
     print("=" * 50)
     
     tools = {
@@ -202,34 +202,34 @@ def verify_installations():
     issues_found = []
     
     for tool, command in tools.items():
-        print(f"\n🔍 Checking {tool}...")
+        print(f"\nChecking {tool}...")
         try:
             result = subprocess.run(command.split(), capture_output=True, text=True, timeout=10)
             if result.returncode == 0:
-                print(f"✅ {tool}: {result.stdout.strip().split(chr(10))[0]}")
+                print(f"{tool}: {result.stdout.strip().split(chr(10))[0]}")
             else:
-                print(f"❌ {tool}: Command failed")
+                print(f"{tool}: Command failed")
                 issues_found.append(tool)
         except subprocess.TimeoutExpired:
-            print(f"⏰ {tool}: Command timed out")
+            print(f"{tool}: Command timed out")
             issues_found.append(tool)
         except FileNotFoundError:
-            print(f"❌ {tool}: Not found in PATH")
+            print(f"{tool}: Not found in PATH")
             issues_found.append(tool)
         except Exception as e:
-            print(f"❌ {tool}: Error - {e}")
+            print(f"{tool}: Error - {e}")
             issues_found.append(tool)
     
     if issues_found:
-        print(f"\n⚠️  Issues found with: {', '.join(issues_found)}")
-        print("\n🔧 Troubleshooting steps:")
+        print(f"\nIssues found with: {', '.join(issues_found)}")
+        print("\nTroubleshooting steps:")
         print("1. Restart your terminal or run: source ~/.bashrc")
         print("2. Check if tools are in PATH: which <tool-name>")
         print("3. Try running with full path: /usr/bin/<tool-name>")
         print("4. For package managers (apt/yum), restart terminal to refresh PATH")
         print("5. Reinstall problematic tools: devops-cli install <tool>")
     else:
-        print("\n🎉 All tools are working correctly!")
+        print("\nAll tools are working correctly!")
 
 def main():
     # Handle version and help flags first

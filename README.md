@@ -4,84 +4,61 @@ A universal installer for DevOps tools across Windows, macOS, and Linux. Automat
 
 ## ✨ Features
 
-- ✅ **Cross-platform support** (Windows, macOS, Linux)
-- ✅ **Automatic dependency management** (Java for Jenkins, etc.)
-- ✅ **Modern installation methods** (no deprecated commands)
-- ✅ **Dynamic version fetching** from official sources
-- ✅ **Interactive and command-line modes**
-- ✅ **Installation verification** and troubleshooting
-- ✅ **Clean uninstallation**
+- Cross-platform support (Windows, macOS, Linux)
+- Automatic dependency management (Java for Jenkins, etc.)
+- Modern installation methods (no deprecated commands)
+- Dynamic version fetching from official sources
+- Interactive and command-line modes
+- Installation verification and troubleshooting
+- Clean uninstallation**
 
 ## 🛠️ Supported Tools
 
 | Tool | Description | Dependencies |
 |------|-------------|-------------|
-| 🐳 **Docker** | Container platform | apt-transport-https, ca-certificates, curl, gnupg |
-| ☸️ **kubectl** | Kubernetes CLI | curl, gnupg |
-| ☁️ **AWS CLI** | Amazon Web Services CLI | unzip, curl |
-| 🌩️ **gcloud** | Google Cloud SDK | curl, python3 |
-| 🔵 **Azure CLI** | Microsoft Azure CLI | curl, gnupg |
-| 🔧 **Jenkins** | CI/CD automation server | **Java 21**, fontconfig |
-| ⛵ **Helm** | Kubernetes package manager | curl |
-| 📊 **Prometheus** | Monitoring system | curl |
-| 🏗️ **Terraform** | Infrastructure as Code | curl, unzip |
+| Docker | Container platform | apt-transport-https, ca-certificates, curl, gnupg |
+| kubectl | Kubernetes CLI | curl, gnupg |
+| AWS CLI | Amazon Web Services CLI | unzip, curl |
+| gcloud | Google Cloud SDK | curl, python3 |
+| Azure CLI | Microsoft Azure CLI | curl, gnupg |
+| Jenkins | CI/CD automation server | **Java 21**, fontconfig |
+| Helm | Kubernetes package manager | curl |
+| Prometheus | Monitoring system | curl |
+| Terraform | Infrastructure as Code | curl, unzip |
 
 ## 🚀 Quick Installation
 
-### **Windows Users**
-```powershell
-# PowerShell (Recommended)
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/tohidhanfi20/devops-cli/main/install-devops-cli.bat" -OutFile "install-devops-cli.bat"
-.\install-devops-cli.bat
-```
+The `devops-cli` can be installed using `npm`, which will handle the underlying Python dependencies.
 
-```cmd
-# Command Prompt (Alternative)
-# Download manually:
-# 1. Go to: https://raw.githubusercontent.com/tohidhanfi20/devops-cli/main/install-devops-cli.bat
-# 2. Save as: install-devops-cli.bat
-# 3. Run: .\install-devops-cli.bat
-```
+### Prerequisites:
+*   **Node.js and npm:** Required for the `npm` installation method.
+*   **Python 3 and pip:** Required for the underlying Python CLI.
+*   **Git:** Required to clone the repository.
 
-### **Linux/macOS Users**
-```bash
-# Download and run the installer
-curl -sSL https://raw.githubusercontent.com/tohidhanfi20/devops-cli/main/install-devops-cli.py | python3
-```
+### Steps:
 
-### **Alternative: Direct Installation**
-```bash
-# Install from PyPI (if available)
-pip install devops-cli-tools
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/tohidhanfi20/devops-cli.git
+    cd devops-cli
+    ```
 
-# Or install directly from GitHub
-pip install git+https://github.com/tohidhanfi20/devops-cli.git
-```
+2.  **Install via npm:**
+    Navigate to the cloned directory and run the following command to install `devops-cli` globally. This will automatically install the Python dependencies using `pip`.
+    ```bash
+    npm install -g .
+    ```
 
-### **For Development/Advanced Users**
-```bash
-# Clone the repository
-git clone https://github.com/tohidhanfi20/devops-cli.git
-cd devops-cli
+3.  **Verify Installation:**
+    After installation, you can verify that the `devops-cli` command is recognized:
+    ```bash
+    devops-cli --version
+    ```
+    You should see the version information for the DevOps CLI.
 
-# Install in development mode
-pip install -e .
+---
 
-# Run the CLI
-devops-cli init
-```
-
-### Manual Installation
-```bash
-# Install dependencies
-pip install -e .
-
-# Add to PATH (if needed)
-# Windows: Add Python Scripts directory to PATH
-# Linux/macOS: export PATH="$PATH:$HOME/.local/bin"
-```
-
-## 📖 Usage
+## Usage
 
 ### Basic Commands
 ```bash
@@ -143,7 +120,7 @@ devops-cli uninstall docker
 devops-cli uninstall jenkins
 ```
 
-## 🔧 Advanced Usage
+## Advanced Usage
 
 ### Interactive Mode
 ```bash
@@ -158,7 +135,7 @@ devops-cli versions docker
 devops-cli versions jenkins
 ```
 
-## 🎯 Examples
+## Examples
 
 ### Complete Jenkins Setup
 ```bash
@@ -185,7 +162,7 @@ sudo systemctl enable docker
 sudo usermod -aG docker $USER
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Windows PATH Issues
 If `devops-cli` command is not found:
@@ -207,15 +184,12 @@ source ~/.bashrc
 ### Verification
 ```bash
 # Check if tools are working
-devops-cli verify
-
-# Check specific tool
 docker --version
 kubectl version --client
 aws --version
 ```
 
-## 🔄 Updates
+## Updates
 
 To update the DevOps CLI itself:
 ```bash
@@ -224,7 +198,7 @@ git pull origin main
 pip install -e .
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -232,15 +206,15 @@ pip install -e .
 4. Test on multiple platforms
 5. Submit a pull request
 
-## 📄 License
+## License
 
 MIT License - see LICENSE file for details.
 
-## 🆘 Support
+## Support
 
 - **Issues**: [GitHub Issues](https://github.com/tohidhanfi20/devops-cli/issues)
 - **Email**: tohidhanfi20@gmail.com
 
 ---
 
-**Made with ❤️ for the DevOps community**
+**Made with  for the DevOps community**

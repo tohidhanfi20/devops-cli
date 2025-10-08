@@ -15,7 +15,7 @@ def clear_screen():
 def show_welcome():
     """Show welcome message"""
     clear_screen()
-    print("🚀 DevOps CLI - Interactive Setup")
+    print("DevOps CLI - Interactive Setup")
     print("=" * 50)
     print("Welcome! This will help you install DevOps tools on your server.")
     print()
@@ -23,15 +23,15 @@ def show_welcome():
 def show_tools_menu():
     """Show the main tools menu"""
     tools = {
-        1: {"name": "🐳 Docker", "description": "Container platform", "module": docker},
-        2: {"name": "☸️ kubectl", "description": "Kubernetes CLI", "module": kubectl},
-        3: {"name": "☁️ AWS CLI", "description": "Amazon Web Services CLI", "module": awscli},
-        4: {"name": "🌩️ gcloud", "description": "Google Cloud SDK", "module": gcloud},
-        5: {"name": "🔵 Azure CLI", "description": "Microsoft Azure CLI", "module": az},
-        6: {"name": "🔧 Jenkins", "description": "CI/CD automation server", "module": jenkins},
-        7: {"name": "⛵ Helm", "description": "Kubernetes package manager", "module": helm},
-        8: {"name": "📊 Prometheus", "description": "Monitoring system", "module": prometheus},
-        9: {"name": "🏗️ Terraform", "description": "Infrastructure as Code", "module": terraform}
+        1: {"name": "Docker", "description": "Container platform", "module": docker},
+        2: {"name": "kubectl", "description": "Kubernetes CLI", "module": kubectl},
+        3: {"name": "AWS CLI", "description": "Amazon Web Services CLI", "module": awscli},
+        4: {"name": "gcloud", "description": "Google Cloud SDK", "module": gcloud},
+        5: {"name": "Azure CLI", "description": "Microsoft Azure CLI", "module": az},
+        6: {"name": "Jenkins", "description": "CI/CD automation server", "module": jenkins},
+        7: {"name": "Helm", "description": "Kubernetes package manager", "module": helm},
+        8: {"name": "Prometheus", "description": "Monitoring system", "module": prometheus},
+        9: {"name": "Terraform", "description": "Infrastructure as Code", "module": terraform}
     }
     
     print("Available Tools:")
@@ -51,9 +51,9 @@ def get_tool_choice():
                 choice_num = int(choice)
                 if 1 <= choice_num <= 9:
                     return choice_num
-            print("❌ Invalid choice. Please enter a number between 1-9.")
+            print("Invalid choice. Please enter a number between 1-9.")
         except KeyboardInterrupt:
-            print("\n\n👋 Installation cancelled.")
+            print("\n\nInstallation cancelled.")
             sys.exit(0)
 
 def show_versions_menu(tool_name, tool_key):
@@ -74,7 +74,7 @@ def show_versions_menu(tool_name, tool_key):
         "terraform": get_terraform_versions
     }
     
-    print(f"\n📋 Available {tool_name} versions:")
+    print(f"\nAvailable {tool_name} versions:")
     print("-" * 40)
     
     try:
@@ -85,11 +85,11 @@ def show_versions_menu(tool_name, tool_key):
             else:
                 versions = version_functions[tool_key](os_type)
         else:
-            print("❌ Version listing not available for this tool.")
+            print("Version listing not available for this tool.")
             return None
         
         if not versions:
-            print("❌ No versions available.")
+            print("No versions available.")
             return None
         
         # Show versions with numbers
@@ -100,7 +100,7 @@ def show_versions_menu(tool_name, tool_key):
         return versions
         
     except Exception as e:
-        print(f"❌ Error fetching versions: {e}")
+        print(f"Error fetching versions: {e}")
         return None
 
 def get_version_choice(versions):
@@ -115,37 +115,37 @@ def get_version_choice(versions):
                 choice_num = int(choice)
                 if 1 <= choice_num <= len(versions):
                     return versions[choice_num - 1]
-            print(f"❌ Invalid choice. Please enter a number between 1-{len(versions)}.")
+            print(f"Invalid choice. Please enter a number between 1-{len(versions)}.")
         except KeyboardInterrupt:
-            print("\n\n👋 Installation cancelled.")
+            print("\n\nInstallation cancelled.")
             sys.exit(0)
 
 def install_tool(tool_name, tool_module, version):
     """Install the selected tool"""
-    print(f"\n🔧 Installing {tool_name} version {version}...")
+    print(f"\nInstalling {tool_name} version {version}...")
     print("-" * 50)
     
     try:
         tool_module.install(version=version)
-        print(f"\n✅ {tool_name} {version} installed successfully!")
+        print(f"\n{tool_name} {version} installed successfully!")
         return True
     except Exception as e:
-        print(f"\n❌ Failed to install {tool_name}: {e}")
+        print(f"\nFailed to install {tool_name}: {e}")
         return False
 
 def ask_continue():
     """Ask if user wants to install another tool"""
     while True:
         try:
-            choice = input("\n🔄 Install another tool? (y/n): ").strip().lower()
+            choice = input("\nInstall another tool? (y/n): ").strip().lower()
             if choice in ['y', 'yes']:
                 return True
             elif choice in ['n', 'no']:
                 return False
             else:
-                print("❌ Please enter 'y' or 'n'.")
+                print("Please enter 'y' or 'n'.")
         except KeyboardInterrupt:
-            print("\n\n👋 Installation cancelled.")
+            print("\n\nInstallation cancelled.")
             sys.exit(0)
 
 def start_interactive_session():
@@ -154,10 +154,10 @@ def start_interactive_session():
     
     # Get OS info
     os_type = get_os()
-    print(f"🖥️  Detected OS: {os_type}")
+    print(f"Detected OS: {os_type}")
     if os_type == "Linux":
         distro = get_linux_distro()
-        print(f"🐧 Linux Distribution: {distro}")
+        print(f"Linux Distribution: {distro}")
     print()
     
     # Tool mapping
@@ -203,13 +203,13 @@ def start_interactive_session():
             if not ask_continue():
                 break
     
-    print("\n🎉 Setup complete!")
+    print("\nSetup complete!")
     print("You can now use the installed tools or run 'devops-cli init' again to install more tools.")
-    print("\n💡 Useful commands:")
+    print("\nUseful commands:")
     print("  devops-cli list          # List all available tools")
     print("  devops-cli status        # Check installation status")
     print("  devops-cli versions <tool>  # Show available versions")
-    print("\n🔧 If a tool command is not found:")
+    print("\nIf a tool command is not found:")
     print("  1. Restart your terminal or run: source ~/.bashrc")
     print("  2. Check if the tool is in PATH: which <tool-name>")
     print("  3. Try running the tool with full path: /usr/bin/<tool-name>")
